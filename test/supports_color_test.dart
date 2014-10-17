@@ -11,12 +11,6 @@ main() {
       expect(supportsColorTestable(hasTerminal: false, env: {'TERM': 'xterm'}), isFalse);
     });
 
-    test('should check TERM on windows', () {
-      expect(supportsColorTestable(isWindows: true, env: {'TERM': 'xterm'}), isTrue);
-      expect(supportsColorTestable(isWindows: true, env: {'TERM': 'cygwin'}), isTrue);
-      expect(supportsColorTestable(isWindows: true), isFalse);
-    });
-
     test('should return true if `COLORTERM` is in env', () {
       expect(supportsColorTestable(env: {'COLORTERM': 'xterm'}), isTrue);
     });
@@ -26,7 +20,7 @@ main() {
       expect(supportsColorTestable(env: {'TERM': 'foo'}), isFalse);
     });
 
-    test('should return true on unsupported terminals', () {
+    test('should return true on supported terminals', () {
       expect(supportsColorTestable(env: {'TERM': 'screen'}), isTrue);
       expect(supportsColorTestable(env: {'TERM': 'xterm'}), isTrue);
       expect(supportsColorTestable(env: {'TERM': 'xterm-color'}), isTrue);
@@ -35,5 +29,19 @@ main() {
       expect(supportsColorTestable(env: {'TERM': 'ansi'}), isTrue);
       expect(supportsColorTestable(env: {'TERM': 'linux'}), isTrue);
     });
+
+    test('should return true on cygwin mintty terminal even though there is no terminal', () {
+      expect(supportsColorTestable(isWindows: true, hasTerminal: false, env: {'TERM': 'xterm'}), isTrue);
+    });
+
+    test('should return false on other windows terminals', () {
+      // [Git Bash](http://msysgit.github.io/).
+      expect(supportsColorTestable(isWindows: true, env: {'TERM': 'msys'}), isFalse);
+      // Default cygwin terminal or Git Bash.
+      expect(supportsColorTestable(isWindows: true, env: {'TERM': 'cygwin'}), isFalse);
+      // cmd.exe, Powershell, etc.
+      expect(supportsColorTestable(isWindows: true), isFalse);
+    });
+
   });
 }

@@ -20,27 +20,21 @@ bool supportsColorTestable({
     bool isWindows: false, 
     Map<String, String> env: const {}}) {
   
-  if (!hasTerminal) {
-    return false;
-  }
-  
   var term = env['TERM'];
   bool supportsTerm() => term != null && term != 'dumb' && _termPattern.hasMatch(term);
   
   if (isWindows) {
-    // TODO: Change to `true` once http://dartbug.com/21337 is fixed.
-    // Cygwin support.
-    return supportsTerm();
+    
+    // Cygwin mintty terminal.
+    // Ignore hasTerminal since it will always be false since mintty uses pipes.
+    if (supportsTerm()) return true;
+    
+    if (!hasTerminal) return false;
+    
+    // TODO: `return true` once http://dartbug.com/21337 is fixed.
+    return false;
   }
 
-  if (env.containsKey('COLORTERM')) {
-    return true;
-  }
-
-  if (supportsTerm()) {
-    return true;
-  }
-
-  return false;
+  return hasTerminal && (env.containsKey('COLORTERM') || supportsTerm());
 }
-final _termPattern = new RegExp(r'^screen|^xterm|^vt100|color|ansi|cygwin|linux', caseSensitive: false);
+final _termPattern = new RegExp(r'^screen|^xterm|^vt100|color|ansi|linux', caseSensitive: false);
