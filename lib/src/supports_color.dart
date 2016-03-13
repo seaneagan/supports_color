@@ -7,8 +7,8 @@ import 'dart:io';
 bool get supportsColor {
   if(_supportsColor == null) {
     _supportsColor = supportsColorTestable(
-        hasTerminal: stdout.hasTerminal, 
-        isWindows: Platform.isWindows, 
+        hasTerminal: stdout.hasTerminal,
+        isWindows: Platform.isWindows,
         env: Platform.environment);
   }
   return _supportsColor;
@@ -16,22 +16,22 @@ bool get supportsColor {
 bool _supportsColor;
 
 bool supportsColorTestable({
-    bool hasTerminal: true, 
-    bool isWindows: false, 
+    bool hasTerminal: true,
+    bool isWindows: false,
     Map<String, String> env: const {}}) {
-  
+
   var term = env['TERM'];
   bool supportsTerm() => term != null && term != 'dumb' && _termPattern.hasMatch(term);
-  
+
   if (isWindows) {
-    
+
     // Cygwin mintty terminal.
     // Ignore hasTerminal since it will always be false since mintty uses pipes.
     if (supportsTerm()) return true;
-    
+
     if (!hasTerminal) return false;
-    
-    // TODO: `return true` once http://dartbug.com/21337 is fixed.
+
+    // TODO: `return true` once https://github.com/dart-lang/sdk/issues/21337 is fixed.
     return false;
   }
 
