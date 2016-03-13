@@ -1,7 +1,7 @@
 name: supports_color
-version: 0.1.1
+version: 0.1.2
 author: Sean Eagan <seaneagan1@gmail.com>
 description: Detect whether the current terminal supports color.  This is a dart port of the https://www.npmjs.org/package/supports-color.
 homepage: https://github.com/seaneagan/supports_color
 dev_dependencies:
-  unittest: '>=0.11.0 <0.12.0'
+    test: '^0.12.6'
