@@ -2,7 +2,7 @@
 library supports_color.test;
 
 import 'package:supports_color/src/supports_color.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 main() {
   group('supportsColor', () {
